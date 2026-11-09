@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('login')->unique();
+            $table->string('avatar')->nullable();
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->unsignedBigInteger('user_status_id')->nullable();
             $table->string('wakapi_uri')->nullable();
-            $table->string('wakapi_key')->nullable();
+            $table->text('wakapi_key')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

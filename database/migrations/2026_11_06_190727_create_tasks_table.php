@@ -15,9 +15,22 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
-            $table->foreignId('task_status_id')->constrained('task_statuses');
+            $table->integer('story_points')->nullable();
+            $table->timestamp('deadline')->nullable();
+            $table->foreignId('created_by')
+                ->constrained('users')
+                ->onDelete('cascade');
+            $table->foreignId('parent_id')
+                ->nullable()
+                ->constrained('tasks')
+                ->onDelete('cascade');
+            $table->foreignId('team_id')
+                ->constrained('teams')
+                ->onDelete('cascade');
+            $table->foreignId('task_priority_id')->nullable()->constrained('task_priorities')->nullOnDelete();
+            $table->foreignId('task_status_id')->nullable()->constrained('task_statuses')->nullOnDelete();
             $table->timestamps();
+            $table->timestamp('closed_at')->nullable();
         });
     }
 
