@@ -11,16 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('task_activity_log', function (Blueprint $table) {
+        Schema::create('task_user', function (Blueprint $table) {
             $table->id();
-            $table->string('action');
-            $table->text('old_value')->nullable();
-            $table->text('new_value')->nullable();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('task_id')->constrained('tasks')->onDelete('cascade');
-            $table->string('previous_hash', 64)->nullable();
-            $table->string('hash', 64);
             $table->timestamps();
+
+            $table->unique(['user_id', 'task_id']);
         });
     }
 
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('task_activity_log');
+        Schema::dropIfExists('task_user');
     }
 };

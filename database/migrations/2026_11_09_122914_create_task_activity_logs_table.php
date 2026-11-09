@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_teams', function (Blueprint $table) {
+        Schema::create('task_activity_logs', function (Blueprint $table) {
             $table->id();
+            $table->string('action');
+            $table->text('old_value')->nullable();
+            $table->text('new_value')->nullable();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
-            $table->foreignId('role_id')->constrained('roles');
+            $table->foreignId('task_id')->constrained('tasks')->onDelete('cascade');
+            $table->string('previous_hash', 64)->nullable();
+            $table->string('hash', 64);
             $table->timestamps();
-            
-            $table->unique(['user_id', 'team_id']);
         });
     }
 
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_teams');
+        Schema::dropIfExists('task_activity_logs');
     }
 };
