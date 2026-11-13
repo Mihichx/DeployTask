@@ -14,6 +14,7 @@ services:
             APP_DEBUG: 'false'
             SERVER_NAME: ':80'
         volumes:
+            - ./.env:/var/www/html/.env
             - caddy_data:/data
             - caddy_config:/config
         networks:
@@ -33,7 +34,7 @@ services:
             POSTGRES_USER: '${DB_USERNAME}'
             POSTGRES_PASSWORD: '${DB_PASSWORD}'
         volumes:
-            - prod-db-data:/var/lib/postgresql/data
+            - prod-db-data:/var/lib/postgresql
         networks:
             - production-net
 
