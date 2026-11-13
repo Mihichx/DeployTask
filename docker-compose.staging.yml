@@ -1,0 +1,56 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: 'deploytask-staging/app'
+        restart: unless-stopped
+        ports:
+            - '8085:80'
+        env_file:
+            - .env
+        environment:
+            APP_ENV: staging
+            APP_DEBUG: 'true'
+            SERVER_NAME: ':80'
+        volumes:
+            - caddy_data:/data
+            - caddy_config:/config
+        networks:
+            - staging-net
+        depends_on:
+            - pgsql
+            - redis
+
+    pgsql:
+        image: 'postgres:18-alpine'
+        restart: unless-stopped
+        env_file:
+            - .env
+        environment:
+            PGPASSWORD: '${DB_PASSWORD}'
+            POSTGRES_DB: '${DB_DATABASE}'
+            POSTGRES_USER: '${DB_USERNAME}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD}'
+        volumes:
+            - staging-db-data:/var/lib/postgresql/data
+        networks:
+            - staging-net
+
+    redis:
+        image: 'redis:alpine'
+        restart: unless-stopped
+        volumes:
+            - staging-redis-data:/data
+        networks:
+            - staging-net
+
+networks:
+    staging-net:
+        driver: bridge
+
+volumes:
+    staging-db-data:
+    staging-redis-data:
+    caddy_data:
+    caddy_config:

@@ -1,4 +1,3 @@
-version: '3'
 services:
     app:
         build:
@@ -7,14 +6,14 @@ services:
         image: 'deploytask-prod/app'
         restart: always
         ports:
-            - '80:80'
-            - '443:443'
+            - '8086:80'
+        env_file:
+            - .env
         environment:
             APP_ENV: production
             APP_DEBUG: 'false'
-            # Все остальные переменные (DB_HOST, DB_PASSWORD) сервер возьмет из .env файла на продакшене
+            SERVER_NAME: ':80'
         volumes:
-            # Для FrankenPHP caddy_data нужен, чтобы сохранять выпущенные SSL-сертификаты Let's Encrypt между перезапусками
             - caddy_data:/data
             - caddy_config:/config
         networks:
@@ -26,14 +25,15 @@ services:
     pgsql:
         image: 'postgres:18-alpine'
         restart: always
-        # На продакшене порты наружу НЕ пробрасываем ради безопасности, контейнеры общаются внутри сети
+        env_file:
+            - .env
         environment:
             PGPASSWORD: '${DB_PASSWORD}'
             POSTGRES_DB: '${DB_DATABASE}'
             POSTGRES_USER: '${DB_USERNAME}'
             POSTGRES_PASSWORD: '${DB_PASSWORD}'
         volumes:
-            - db-data:/var/lib/postgresql
+            - prod-db-data:/var/lib/postgresql/data
         networks:
             - production-net
 
@@ -41,7 +41,7 @@ services:
         image: 'redis:alpine'
         restart: always
         volumes:
-            - redis-data:/data
+            - prod-redis-data:/data
         networks:
             - production-net
 
@@ -50,7 +50,7 @@ networks:
         driver: bridge
 
 volumes:
-    db-data:
-    redis-data:
+    prod-db-data:
+    prod-redis-data:
     caddy_data:
     caddy_config:
