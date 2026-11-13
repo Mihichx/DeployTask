@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="240" height="240">
+  <!-- Глаза -->
+  <circle cx="46" cy="56" r="14" fill="#E60000" />
+  <circle cx="114" cy="56" r="14" fill="#E60000" />
+
+  <!-- Грустный рот (компактная дуга по центру) -->
+  <path d="M 48,118 A 36,36 0 0 1 112,118"
+        fill="none" stroke="#E60000" stroke-width="16"
+        stroke-linecap="square" />
+</svg>

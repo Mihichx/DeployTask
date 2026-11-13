@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" width="240" height="160">
+  <!-- Буква D (внешний красный контур) -->
+  <path d="M 20,24 H 56 A 56,56 0 0 1 112,80 A 56,56 0 0 1 56,136 H 20 Z"
+        fill="none" stroke="#E60000" stroke-width="12"
+        stroke-linecap="square" stroke-linejoin="miter" />
+
+  <!-- Буква D (внутреннее маленькое D того же красного цвета) -->
+  <path d="M 42,46 H 56 A 34,34 0 0 1 90,80 A 34,34 0 0 1 56,114 H 42 Z"
+        fill="none" stroke="#E60000" stroke-width="12"
+        stroke-linecap="square" stroke-linejoin="miter" />
+
+  <!-- Буква T (замкнутый красный контур с пустой полостью внутри) -->
+  <path d="M 122,24 H 220 V 48 H 183 V 136 H 159 V 48 H 122 Z"
+        fill="none" stroke="#E60000" stroke-width="12"
+        stroke-linecap="square" stroke-linejoin="miter" />
+</svg>
