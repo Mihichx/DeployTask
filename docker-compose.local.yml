@@ -24,6 +24,7 @@ services:
         depends_on:
             - pgsql
             - redis
+            
     pgsql:
         image: 'postgres:18-alpine'
         ports:
@@ -49,6 +50,7 @@ services:
                 - '${DB_USERNAME}'
             retries: 3
             timeout: 5s
+
     redis:
         image: 'redis:alpine'
         ports:
@@ -64,9 +66,18 @@ services:
                 - ping
             retries: 3
             timeout: 5s
+
+    buggregator:
+      image: ghcr.io/buggregator/server:latest
+      ports:
+        - "8000:8000"
+      networks:
+        - sail
+
 networks:
     sail:
         driver: bridge
+
 volumes:
     sail-pgsql:
         driver: local

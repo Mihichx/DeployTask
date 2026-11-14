@@ -12,6 +12,8 @@
         "livewire/livewire": "^4.4"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^4.4",
+        "buggregator/trap": "^1.15",
         "fakerphp/faker": "^1.23",
         "laravel-lang/lang": "^15.37",
         "laravel/pail": "^1.2.5",
