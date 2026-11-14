@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             SystemDataSeeder::class,
+            TaskSeeder::class,
         ]);
     }
 }

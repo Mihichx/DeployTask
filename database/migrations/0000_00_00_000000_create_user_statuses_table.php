@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('user_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->string('color')->unique();
         });
     }
 
