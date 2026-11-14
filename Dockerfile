@@ -2,7 +2,7 @@ FROM dunglas/frankenphp:1-php8.5-alpine
 
 # Установка системных зависимостей, Node.js/NPM для фронтенда и расширений PHP
 RUN apk add --no-cache bash nodejs npm \
-    && install-php-extensions pdo_pgsql pgsql zip intl opcache bcmath
+    && install-php-extensions pdo_pgsql pgsql bcmath intl sodium zip sockets
 
 # Копируем Composer из официального образа
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
