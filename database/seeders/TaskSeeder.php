@@ -113,6 +113,11 @@ class TaskSeeder extends Seeder
                 'closed_at' => $isDone ? fake()->dateTimeBetween('-10 days', 'now') : null,
             ]);
 
+            // Назначаем 1 или 2 случайных исполнителей на задачу
+            $task->assignees()->attach(
+                $userIds->random(rand(1, 2))->all()
+            );
+
             $parentTasks->push($task);
         }
 
@@ -122,7 +127,7 @@ class TaskSeeder extends Seeder
             $statusId = $statusIds->isNotEmpty() ? $statusIds->random() : null;
             $isDone = $statusId && $statusId === $doneStatusId;
 
-            Task::create([
+            $subtask = Task::create([
                 'name' => 'Подзадача: ' . fake('ru_RU')->realText(35),
                 'description' => fake('ru_RU')->boolean(50) ? fake('ru_RU')->realText(120) : null,
                 'story_points' => fake()->randomElement($subtaskPoints),
@@ -134,6 +139,11 @@ class TaskSeeder extends Seeder
                 'task_status_id' => $statusId,
                 'closed_at' => $isDone ? fake()->dateTimeBetween('-5 days', 'now') : null,
             ]);
+
+            // Назначаем 1 случайного исполнителя на подзадачу
+            $subtask->assignees()->attach(
+                $userIds->random(1)->all()
+            );
         }
     }
 }
