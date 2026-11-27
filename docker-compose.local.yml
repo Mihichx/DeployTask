@@ -19,12 +19,14 @@ services:
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
         volumes:
             - '.:/var/www/html'
+        tmpfs:
+            - '/var/www/html/storage/framework/views:uid=1000,gid=1000,mode=0777'
         networks:
             - sail
         depends_on:
             - pgsql
             - redis
-            
+
     pgsql:
         image: 'postgres:18-alpine'
         ports:
