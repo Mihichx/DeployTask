@@ -11,6 +11,8 @@ class TaskService
 {
     public function getTasks(?int $teamId = null): Collection
     {
+        $userId = auth()->id();
+
         return Task::query()
             ->whereNull('parent_id')
             ->when($teamId, fn($query) => $query->where('team_id', $teamId))
@@ -19,6 +21,12 @@ class TaskService
                 'subtasks',
                 'subtasks as completed_subtasks_count' => fn($q) => $q->whereNotNull('closed_at'),
             ])
+            ->when($userId, function ($query) use ($userId) {
+                $query->orderByRaw(
+                    'EXISTS (SELECT 1 FROM task_user WHERE task_user.task_id = tasks.id AND task_user.user_id = ?) DESC',
+                    [$userId]
+                );
+            })
             ->orderByRaw('task_priority_id DESC NULLS LAST')
             ->latest('id')
             ->get();

@@ -1,17 +1,10 @@
 @import 'tailwindcss';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
 
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
-}
-
-*,
-::before,
-::after {
-    border-color: transparent;
 }
 
 html,
@@ -30,7 +23,7 @@ html.no-transitions * {
 }
 
 /* Мгновенное скрытие меню и шапки до запуска Alpine при перезагрузке в фокусе */
-html.is-focus-mode.no-transitions [data-focus-hide] {
+html.is-focus-mode [data-focus-hide] {
     display: none !important;
 }
 

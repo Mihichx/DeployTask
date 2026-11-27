@@ -12,11 +12,11 @@
             $event.dataTransfer.effectAllowed = 'move';
         "
         @dragend="resetDrag()"
-        :class="draggingTaskId === {{ $task->id }} && 'opacity-60 scale-[0.98] rotate-1 !border-orange-500 !bg-zinc-900 shadow-lg shadow-orange-500/15'" @endif
+        :class="draggingTaskId === {{ $task->id }} && 'opacity-60 scale-[0.98] rotate-1 border-orange-500! bg-zinc-900! shadow-lg shadow-orange-500/15'" @endif
     @class([
         'relative rounded-lg border border-zinc-800/90 p-3 select-none',
         'group bg-zinc-950 cursor-grab active:cursor-grabbing hover:border-zinc-600 hover:-translate-y-px hover:shadow-md hover:shadow-black/40 transition-[transform,border-color,box-shadow] duration-150' => $canMove,
-        'bg-zinc-950/60 cursor-default opacity-75' => !$canMove,
+        'bg-zinc-950/40 border-zinc-800/50 cursor-default opacity-45 saturate-50 hover:opacity-75 transition-opacity duration-150' => !$canMove,
     ])>
 
     <!-- Верхняя строка: ID и Приоритет -->
@@ -64,7 +64,7 @@
             <span @class([
                 'text-[11px] truncate',
                 'text-zinc-300 font-medium' => $canMove,
-                'text-zinc-500' => !$canMove,
+                'text-zinc-600' => !$canMove,
             ])>
                 {{ $task->assignees->map(fn($assign) => \Illuminate\Support\Str::before($assign->name, ' '))->join(', ') }}
             </span>
