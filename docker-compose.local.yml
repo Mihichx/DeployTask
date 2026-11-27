@@ -19,11 +19,14 @@ services:
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
         volumes:
             - '.:/var/www/html'
+        tmpfs:
+            - '/var/www/html/storage/framework/views:uid=1000,gid=1000,mode=0777'
         networks:
             - sail
         depends_on:
             - pgsql
             - redis
+
     pgsql:
         image: 'postgres:18-alpine'
         ports:
@@ -49,6 +52,7 @@ services:
                 - '${DB_USERNAME}'
             retries: 3
             timeout: 5s
+
     redis:
         image: 'redis:alpine'
         ports:
@@ -64,9 +68,18 @@ services:
                 - ping
             retries: 3
             timeout: 5s
+
+    buggregator:
+      image: ghcr.io/buggregator/server:latest
+      ports:
+        - "8000:8000"
+      networks:
+        - sail
+
 networks:
     sail:
         driver: bridge
+
 volumes:
     sail-pgsql:
         driver: local

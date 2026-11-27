@@ -1,9 +1,86 @@
 @import 'tailwindcss';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
 
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+html,
+body {
+    background-color: #09090b;
+    color: #ffffff;
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+/* Отключаем анимации только в первую долю секунды при загрузке страницы */
+html.no-transitions * {
+    transition: none !important;
+}
+
+/* Мгновенное скрытие меню и шапки до запуска Alpine при перезагрузке в фокусе */
+html.is-focus-mode [data-focus-hide] {
+    display: none !important;
+}
+
+/* Плавающая панель: фиксированная позиция + плавное появление/исчезновение */
+[data-focus-show] {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 40;
+    transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
+}
+
+html:not(.is-focus-mode) [data-focus-show] {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+    visibility: hidden;
+    pointer-events: none;
+}
+
+html.is-focus-mode [data-focus-show] {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Кастомный темный тонкий скроллбар */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #27272a;
+    border-radius: 9999px;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+    background-color: #3f3f46;
+}
+
+/* Поддержка для браузера Firefox */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #27272a transparent;
+}
+
+/* Красный цвет для стандартного прогресс-бара Livewire */
+#nprogress .bar {
+    background: #ef4444 !important; /* red-500 */
+    height: 2px !important;
+}
+
+#nprogress .peg {
+    box-shadow: 0 0 10px #ef4444, 0 0 5px #f97316 !important;
 }

@@ -22,6 +22,7 @@ services:
         depends_on:
             - pgsql
             - redis
+            - buggregator
 
     pgsql:
         image: 'postgres:18-alpine'
@@ -43,6 +44,14 @@ services:
         restart: unless-stopped
         volumes:
             - staging-redis-data:/data
+        networks:
+            - staging-net
+
+    buggregator:
+        image: ghcr.io/buggregator/server:latest
+        restart: unless-stopped
+        ports:
+            - '127.0.0.1:8000:8000'
         networks:
             - staging-net
 

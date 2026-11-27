@@ -1,26 +1,33 @@
 FROM dunglas/frankenphp:1-php8.5-alpine
 
-# Установка системных зависимостей, Node.js/NPM для фронтенда и расширений PHP
+# 1. Базовые утилиты и тяжёлые PHP-расширения (редко меняются, кэшируются надолго)
 RUN apk add --no-cache bash nodejs npm \
-    && install-php-extensions pdo_pgsql pgsql zip intl opcache bcmath
+    && install-php-extensions pdo_pgsql pgsql bcmath intl sodium zip
 
-# Копируем Composer из официального образа
+# 2. Дополнительные расширения отдельным слоем (чтобы не пересобирать intl при правках)
+RUN install-php-extensions sockets
+
+# Копируем Composer и разрешаем запуск от root без предупреждений
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# Устанавливаем рабочую директорию
 WORKDIR /var/www/html
 
-# Сначала копируем только файлы зависимостей (для кэширования слоев Docker)
+# 3. Устанавливаем PHP-зависимости с кэшем BuildKit
 COPY composer.json composer.lock ./
-RUN composer install --no-interaction --optimize-autoloader --no-scripts
+RUN --mount=type=cache,target=/tmp/composer-cache \
+    COMPOSER_CACHE_DIR=/tmp/composer-cache \
+    composer install --no-interaction --optimize-autoloader --no-scripts
 
+# 4. Устанавливаем JS-зависимости быстрее через npm ci и кэш
 COPY package.json package-lock.json* ./
-RUN npm install
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --no-audit --no-fund
 
-# Теперь копируем остальной исходный код
+# 5. Копируем исходный код
 COPY . /var/www/html
 
-# Завершаем скрипты Composer, собираем фронтенд и удаляем node_modules для экономии места
+# 6. Генерируем автозагрузчик, собираем фронтенд и чистим node_modules
 RUN composer dump-autoload --optimize \
     && npm run build \
     && rm -rf node_modules

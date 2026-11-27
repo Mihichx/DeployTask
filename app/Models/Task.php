@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable([
@@ -39,6 +40,11 @@ class Task extends Model
         return $this->belongsTo(TaskStatus::class, 'task_status_id');
     }
 
+    public function priority(): BelongsTo
+    {
+        return $this->belongsTo(TaskPriority::class, 'task_priority_id');
+    }
+
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -52,5 +58,11 @@ class Task extends Model
     public function subtasks(): HasMany
     {
         return $this->hasMany(Task::class, 'parent_id');
+    }
+
+    public function assignees(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'task_user')
+            ->withTimestamps();
     }
 }
